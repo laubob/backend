@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+  <head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta name="viewport" content="initial-scale=1.0, user-scalable=yes" />
+	<style type="text/css">  
+		html{height:100%}  
+		body{height:100%;margin:0px;padding:0px}  
+		#container{width: 100%;height: 100%}  
+		table.gridtable {
+			font-family: verdana,arial,sans-serif;
+			font-size:11px;
+			color:#333333;
+			border-width: 5px;
+			border-color: #666666;
+			border-collapse: collapse;
+		}
+		table.gridtable th {
+			border-width: 1px;
+			padding: 8px;
+			border-style: solid;
+			border-color: #666666;
+			background-color: #dedede;
+		}
+		table.gridtable td {
+			border-width: 1px;
+			padding: 8px;
+			border-style: solid;
+			border-color: #666666;
+			background-color: #ffffff;
+		}
+	</style>	
+	<script src="../static/echarts.min.js"></script>
+    <title>上海市食品药品监督管理局</title>
+  </head>
+  <body>
+	<p> <img src="../static/title.gif" width="800" height="100"/>	</p>
+	<table width="1024" border="0" align="left" cellspacing="0">
+		<tr>
+			<td width="800" height="600"><div id="container"></div></td>
+			<script type="text/javascript">
+				// 基于准备好的dom，初始化echarts实例
+				var myChart = echarts.init(document.getElementById('container'));
+				var cates = ['李四','赵六','王五'];
+				var counts = [];
+				for (var i = 0; i <= 2; i++) {
+					counts.push(i*5);
+				}
+
+				function fetchData(cb) {
+					// 通过 setTimeout 模拟异步加载
+					setTimeout(function () {
+						cb({
+							categories: cates,
+							data: counts
+						});
+					}, 1000);
+				}
+
+				// 初始 option
+				var option = {
+					title: {
+						text: '异步数据加载示例'
+					},
+					tooltip: {},
+					legend: {
+						data:['销量']
+					},
+					xAxis: {
+						data: []
+					},
+					yAxis: {},
+					series: [{
+						name: '销量',
+						type: 'bar',
+						data: []
+					}]
+				};
+				myChart.setOption(option);
+
+				fetchData(function (data) {
+					myChart.setOption({
+						xAxis: {
+							data: data.categories
+						},
+						series: [{
+							// 根据名字对应到相应的系列
+							name: '销量',
+							data: data.data
+						}]
+					});
+				});				// 指定图表的配置项和数据
+				
+/*				var option = {
+					title: {
+						text: '基层人员检测次数统计图'
+					},
+					tooltip: {},
+					legend: {
+						data:cates
+					},
+					xAxis: {
+						data: []
+					},
+					yAxis: {},
+					series: [{
+						name: '检测次数',
+						type: 'bar',
+						data: []
+					}]
+				};
+
+				// 使用刚指定的配置项和数据显示图表。
+				myChart.setOption({
+					xAxis: {
+						data: cates
+					},
+					series: [{
+						// 根据名字对应到相应的系列
+						name: '检测次数',
+						data: counts
+					}]
+				});*/
+			</script>
+		</tr>
+	</table>
+  </body>
+</html>

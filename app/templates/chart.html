@@ -1,0 +1,61 @@
+{% extends "base1.html" %}
+{% block chart %}
+	<script type="text/javascript">
+        // 基于准备好的dom，初始化echarts实例
+        var myChart = echarts.init(document.getElementById('container'));
+
+		var cate = [];
+		var count = [];
+		{% for data in datas %}
+			cate.push({{data.user}});
+			count.push({{data.count}});
+		{% endfor %}	
+
+ 		function fetchData(cb) {
+			// 通过 setTimeout 模拟异步加载
+			setTimeout(function () {
+				cb({
+					categories: cate,
+					data: count
+				});
+			}, 1000);
+		}
+				// 指定图表的配置项和数据
+        var option = {
+            title: {
+                text: '基层人员检测次数统计图'
+            },
+            tooltip: {},
+            legend: {
+                data:['检测次数']
+            },
+            xAxis: {
+                data: []
+            },
+            yAxis: {},
+            series: [{
+                name: '检测次数',
+                type: 'bar',
+                data: []
+            }]
+        };
+
+        // 使用刚指定的配置项和数据显示图表。
+        myChart.setOption(option);
+		fetchData(function (data) {
+			myChart.setOption({
+				xAxis: {
+					data: data.categories
+				},
+				series: [{
+					// 根据名字对应到相应的系列
+					name: '检测次数',
+					barWidth: '50%',
+					data: data.data
+				}]
+			});
+		});	
+    </script>
+
+{% endblock %}
+

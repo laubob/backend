@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block map %}
+<script type="text/javascript">
+	// 百度地图API功能
+	var map = new BMap.Map("container");
+	var point = new BMap.Point({{center.longitude}}, {{center.latitude}});
+	map.centerAndZoom(point, 16);
+	
+	{% for sub in subs %}
+	point = new BMap.Point({{sub.longitude}},{{sub.latitude}});
+	var marker = new BMap.Marker(point);  // 创建标注
+	map.addOverlay(marker);              // 将标注添加到地图中//	
+//	var circle;
+//	if ({{sub.qual}}=="阳“) {
+//		circle = new BMap.Circle(point,30,{strokeColor:"red", strokeWeight:20, strokeOpacity:0.5}); //创建圆
+//	} else {
+//		circle = new BMap.Circle(point,30,{strokeColor:"green", strokeWeight:20, strokeOpacity:0.5}); //创建圆
+//	}
+//	map.addOverlay(circle);            //增加圆
+//	var str = "检测地址:"+{{sub.address}}+{{sub.store}}+"<br/>"+{{sub.type}}+{{sub.item}}+"<br/>检测结果:"+{{sub.qual}}+String("{{sub.quan}}");
+//	var str = "检测地址:{{sub.address}}{{sub.store}}<br/>{{sub.type}}{{sub.item}}<br/>检测结果:{{sub.qual}}性{{sub.quan}}";
+//	alert(str);
+	var opts = {
+	  width : 200,     // 信息窗口宽度
+	  height: 110     // 信息窗口高度
+	}
+//	var infoWindow = new BMap.InfoWindow(str, opts);  // 创建信息窗口对象 
+	marker.addEventListener("click", function(e){          
+		var p = e.target;
+		var point = new BMap.Point(p.getPosition().lng, p.getPosition().lat);
+		var infoWindow = new BMap.InfoWindow("检测地址:{{sub.address}}<br/>{{sub.store}}<br/>{{sub.item}}:{{sub.object}}<br/>检测结果:{{sub.qual}}性{{sub.quan}}", opts);
+		map.openInfoWindow(infoWindow,point); //开启信息窗口
+	});
+//	function overlay_style(e){
+//		var p = e.target;
+		 
+//	}	
+	{% endfor %}	
+</script>
+{% endblock %}
+
+{% block detail %}
+<table class="gridtable" style="float:up">
+	<tr><th>检测人</th><th>被检单位</th><th>检测项</th><th>检测结果</th></tr>
+	{% for sub in subs %}
+	<tr><td>{{sub.checker}}</td><td>{{sub.store}}</td><td>{{sub.item}}</td><td>{{sub.qual}}</td></tr>
+	{% endfor %}	
+</table>
+{% endblock %}

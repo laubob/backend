@@ -1,0 +1,50 @@
+{% extends "base1.html" %}
+{% block chart %}
+	<script type="text/javascript">
+        // 基于准备好的dom，初始化echarts实例
+        var myChart = echarts.init(document.getElementById('container'));
+
+        var option = {
+			title : {
+				text: '各类型检查占比',
+				x:'center'
+			},
+			tooltip : {
+				trigger: 'item',
+				formatter: "{a} <br/>{b} : {c} ({d}%)"
+			},
+			legend: {
+				orient: 'vertical',
+				left: 'left',
+				data: ['日常检查','日常监督抽查','投诉举报稽查','专项行动检查','上级检查指导']
+			},
+			series : [
+				{
+					name: '任务来源',
+					type: 'pie',
+					radius : '55%',
+					center: ['50%', '60%'],
+					data:[
+						{value:160, name:'日常检查'},
+						{value:40, name:'日常监督抽查'},
+						{value:40, name:'投诉举报稽查'},
+						{value:40, name:'专项行动检查'},
+						{value:20, name:'上级检查指导'}
+					],
+					itemStyle: {
+						emphasis: {
+							shadowBlur: 10,
+							shadowOffsetX: 0,
+							shadowColor: 'rgba(0, 0, 0, 0.5)'
+						}
+					}
+				}
+			]
+		};
+
+        // 使用刚指定的配置项和数据显示图表。
+        myChart.setOption(option);
+    </script>
+
+{% endblock %}
+

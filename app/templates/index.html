@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block map %}
+<script type="text/javascript">
+	// 百度地图API功能
+	var map = new BMap.Map("container");
+	var point = new BMap.Point({{center.longitude}}, {{center.latitude}});
+	map.centerAndZoom(point, 15);
+	
+	{% for sub in subs %}
+	var circle = new BMap.Circle(new BMap.Point({{sub.longitude}},{{sub.latitude}}),10*{{sub.count}},{strokeColor:"green", strokeWeight:50, strokeOpacity:0.5}); //创建圆
+	map.addOverlay(circle);            //增加圆
+	circle.addEventListener("click", function(){
+		window.location.href="http://localhost:5000/"+String("{{sub.id}}");    
+	});
+	
+	var opts = {
+	  position : new BMap.Point({{sub.longitude}},{{sub.latitude}}),    // 指定文本标注所在的地理位置
+	  offset   : new BMap.Size(-5, -5)    //设置文本偏移量
+	}
+	var label = new BMap.Label({{sub.count}}, opts);  // 创建文本标注对象	//获取marker的属性
+	map.addOverlay(label); 
+	
+//	function overlay_style(e){
+//		var p = e.target;
+		 
+//	}	
+	{% endfor %}	
+</script>
+{% endblock %}
+
+{% block detail %}
+<table class="gridtable" style="float:up">
+	<tr><th>机构名称</th><th>检测数量</th>	</tr>
+	{% for sub in subs %}
+	<tr><td>{{sub.name}}</td><td>{{sub.count}}</td></tr>
+	{% endfor %}	
+</table>
+{% endblock %}
